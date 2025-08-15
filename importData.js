@@ -9,7 +9,7 @@ const {
   PORT = 3000,
   API_SECRET,
   CMC_API_KEY,
-  CHECK_INTERVAL_CRON = '*/1 * * * *',
+  CHECK_INTERVAL_CRON="0 8 * * *",
   FNG_THRESHOLD = '50',
 } = process.env;
 
@@ -153,20 +153,6 @@ cron.schedule(CHECK_INTERVAL_CRON, async () => {
       const r = await sendPushToAll({ title, body });
       console.log(`[CRON] Pushed (fear) to ${r.sent}/${r.tokens}`);
     }
-
-    // Keep your original threshold checks if you still want them
-    else if (value > threshold) {
-      const title = '🚀 Market Alert';
-      const body = `Fear & Greed Index is high (${value}). Stay cautious.`;
-      const r = await sendPushToAll({ title, body });
-      console.log(`[CRON] Pushed to ${r.sent}/${r.tokens} tokens`);
-    } else if (value >= threshold - 5 && value <= threshold + 5) {
-      const title = '🔔 Market Alert';
-      const body = `F&G near neutral (${value}). Monitor conditions.`;
-      const r = await sendPushToAll({ title, body });
-      console.log(`[CRON] Pushed (neutral) to ${r.sent}/${r.tokens}`);
-    }
-
   } catch (e) {
     console.error('[CRON] Error:', e.message);
   }
