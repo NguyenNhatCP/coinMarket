@@ -135,13 +135,27 @@ async function sendPushToAll({ title, body }) {
 }
 
 // Scheduled job
+// Scheduled job
 cron.schedule(CHECK_INTERVAL_CRON, async () => {
   try {
     const value = await fetchFearGreed();
     console.log(`[CRON] Fear & Greed index: ${value}`);
     const threshold = Number(FNG_THRESHOLD);
 
-    if (value > threshold) {
+    if (value > 60) {
+      const title = '🚀 Extreme Greed Alert';
+      const body = `Fear & Greed Index is very high (${value}). Market may be overheated.`;
+      const r = await sendPushToAll({ title, body });
+      console.log(`[CRON] Pushed (greed) to ${r.sent}/${r.tokens}`);
+    } else if (value < 60) {
+      const title = '📉 Caution Alert';
+      const body = `Fear & Greed Index is below 60 (${value}). Possible market caution.`;
+      const r = await sendPushToAll({ title, body });
+      console.log(`[CRON] Pushed (fear) to ${r.sent}/${r.tokens}`);
+    }
+
+    // Keep your original threshold checks if you still want them
+    else if (value > threshold) {
       const title = '🚀 Market Alert';
       const body = `Fear & Greed Index is high (${value}). Stay cautious.`;
       const r = await sendPushToAll({ title, body });
@@ -152,6 +166,7 @@ cron.schedule(CHECK_INTERVAL_CRON, async () => {
       const r = await sendPushToAll({ title, body });
       console.log(`[CRON] Pushed (neutral) to ${r.sent}/${r.tokens}`);
     }
+
   } catch (e) {
     console.error('[CRON] Error:', e.message);
   }
