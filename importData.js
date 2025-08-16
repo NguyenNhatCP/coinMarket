@@ -9,7 +9,7 @@ const {
   PORT = 3000,
   API_SECRET,
   CMC_API_KEY,
-  CHECK_INTERVAL_CRON="10 8 * * *",
+  CHECK_INTERVAL_CRON="15 8 * * *",
   FNG_THRESHOLD = '50',
 } = process.env;
 
