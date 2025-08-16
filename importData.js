@@ -9,7 +9,7 @@ const {
   PORT = 3000,
   API_SECRET,
   CMC_API_KEY,
-  CHECK_INTERVAL_CRON="15 8 * * *",
+  CHECK_INTERVAL_CRON="0 8 * * *",
   FNG_THRESHOLD = '50',
 } = process.env;
 
@@ -144,14 +144,14 @@ cron.schedule(
       console.log(`[CRON] Fear & Greed index: ${value}`);
       const threshold = Number(FNG_THRESHOLD);
 
-      if (value > 60) {
+      if (value > 80) {
         const title = '🚀 Extreme Greed Alert';
         const body = `Fear & Greed Index is very high (${value}). Market may be overheated.`;
         const r = await sendPushToAll({ title, body });
         console.log(`[CRON] Pushed (greed) to ${r.sent}/${r.tokens}`);
-      } else if (value < 60) {
+      } else if (value < 30) {
         const title = '📉 Caution Alert';
-        const body = `Fear & Greed Index is below 60 (${value}). Possible market caution.`;
+        const body = `Fear & Greed Index is below (${value}). Possible market caution.`;
         const r = await sendPushToAll({ title, body });
         console.log(`[CRON] Pushed (fear) to ${r.sent}/${r.tokens}`);
       }
