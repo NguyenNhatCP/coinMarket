@@ -149,7 +149,8 @@ cron.schedule(
         const body = `Fear & Greed Index is very high (${value}). Market may be overheated.`;
         const r = await sendPushToAll({ title, body });
         console.log(`[CRON] Pushed (greed) to ${r.sent}/${r.tokens}`);
-      } else if (value < 30) {
+      }  
+      if (value < 30) {
         const title = '📉 Caution Alert';
         const body = `Fear & Greed Index is below (${value}). Possible market caution.`;
         const r = await sendPushToAll({ title, body });
